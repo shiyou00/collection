@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>模拟鼠标事件</title>
+</head>
+<body>
+<div id="myBtn">模拟鼠标的点击事件</div>
+<div id="myDiv">自定义事件</div>
+<script src="collection.js"></script>
+<script>
+    var btn = document.getElementById("myBtn");
+
+    //创建事件对象
+    var event = document.createEvent("MouseEvents");
+
+    //初始化事件对象
+    event.initMouseEvent("click", true, true, document.defaultView, 0, 0, 0, 0, 0,
+        false, false, false, false, 0, null);
+
+    btn.onclick = function(event){
+        console.log(`${event.target.id}被点击了`);
+    };
+
+    //触发事件
+    btn.dispatchEvent(event);
+
+    var div = document.getElementById("myDiv"),
+        event1;
+
+    EventUtil.addHandler(div, "myevent", function(event){
+        alert("DIV: " + event1.detail);
+    });
+    EventUtil.addHandler(document, "myevent", function(event){
+        alert("DOCUMENT: " + event1.detail);
+    });
+
+    if (document.implementation.hasFeature("CustomEvents", "3.0")){
+        event1 = document.createEvent("CustomEvent");
+        event1.initCustomEvent("myevent", true, false, "Hello world!");
+        div.dispatchEvent(event1);
+    }
+
+</script>
+</body>
+</html>
